@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="sales_order_status_change_history" resource="default" engine="innodb" comment="Order Status Change History">
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="int" name="order_id" unsigned="true" nullable="false" comment="Order ID"/>
+        <column xsi:type="varchar" name="old_status" nullable="false" length="32" comment="Old Status"/>
+        <column xsi:type="varchar" name="new_status" nullable="false" length="32" comment="New Status"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+
+        <constraint xsi:type="foreign" referenceId="ORDER_STATUS_CHANGE_HISTORY_ORDER_ID_FK" table="sales_order_status_change_history" column="order_id" referenceTable="sales_order" referenceColumn="entity_id" onDelete="cascade"/>
+    </table>
+</schema>
