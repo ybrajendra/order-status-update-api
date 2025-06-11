@@ -64,3 +64,56 @@ true
 - **API Exposure**: The method is exposed securely using `webapi.xml`, allowing REST access.
 - **Validation**: Ensures structure and safety when parsing incoming requests.
 - **Extensibility**: Built to be easily extensible via plugins or preference overrides without modifying core logic.
+
+
+## 🖥️ Admin UI Page: Order Status Change History
+
+- The module provides an **admin grid** under **Sales > Order Status Change History**.
+- The grid shows a history of all order status changes (from the custom table).
+- **Features:**
+  - Filters for each column (ID, Order Number, Old Status, New Status, Date)
+  - Mass delete action
+  - Enable, disable are just for show casing the mass action handling, nothing will change in DB.
+- Fully built using Magento 2 UI components and data providers.
+
+---
+
+## 🗄️ Caching & Identity Interface
+
+- The module implements Magento’s [`IdentityInterface`](https://developer.adobe.com/commerce/php/development/components/cache/identity-interface/) for the `OrderStatusHistory` model.
+- Each status history record is tagged with a unique cache tag (e.g., `custom_order_status_history_123`).
+- **automatically invalidated** when a status history record is created or deleted.
+- For advanced scenarios, the module includes examples of using Magento’s [Cache API](https://developer.adobe.com/commerce/php/development/components/cache/custom-caching/) for caching frequently accessed order history.
+
+---
+
+## 🧪 Testing
+
+### Unit Testing
+
+- All core business logic is covered by **unit tests**.
+- Test files are located under:\
+  `dev/tests/unit/Vendor/CustomOrderProcessing/Model/`
+- **Examples tested:**
+  - Status update success
+  - No status change
+  - Status update with email notification
+  - Exception handling for invalid input
+
+### Integration Testing
+
+- End-to-end integration tests ensure module functionality with real Magento data.
+- Test files are under:\
+  `dev/tests/integration/testsuite/Vendor/CustomOrderProcessing/Observer/`
+- **Examples tested:**
+  - Observer logs changes to custom table on order status change
+
+#### Running Tests
+
+```bash
+# Unit tests
+vendor/bin/phpunit -c dev/tests/unit/phpunit.xml.dist dev/tests/unit/Vendor/CustomOrderProcessing/Model/OrderStatusManagementTest.php
+
+# Integration tests (require test DB config)
+vendor/bin/phpunit -c /var/www/html/mage246/dev/tests/integration/phpunit.xml dev/tests/integration/testsuite/Vendor/CustomOrderProcessing/Observer/OrderStatusHistoryTest.php
+```

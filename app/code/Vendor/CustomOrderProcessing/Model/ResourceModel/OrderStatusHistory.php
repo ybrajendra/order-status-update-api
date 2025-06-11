@@ -7,6 +7,6 @@ class OrderStatusHistory extends AbstractDb
 {
     protected function _construct()
     {
-        $this->_init('sales_order_status_change_history', 'id');
+        $this->_init('sales_order_status_change_history', 'entity_id');
     }
 } 

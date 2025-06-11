@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Vendor_CustomOrderProcessing::history" title="Order Status Change History" translate="title" module="Vendor_CustomOrderProcessing" sortOrder="10" parent="Magento_Sales::sales" dependsOnModule="Vendor_CustomOrderProcessing" resource="Vendor_CustomOrderProcessing::history"/>
+        <add id="Vendor_CustomOrderProcessing::history_index" title="View History" translate="title" module="Vendor_CustomOrderProcessing" sortOrder="20" parent="Vendor_CustomOrderProcessing::history" action="customorderprocessing/history/index" dependsOnModule="Vendor_CustomOrderProcessing" resource="Vendor_CustomOrderProcessing::history_index"/>
+    </menu>
+</config>

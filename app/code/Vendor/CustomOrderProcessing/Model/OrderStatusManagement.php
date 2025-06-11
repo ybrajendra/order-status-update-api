@@ -7,6 +7,7 @@ use Magento\Sales\Model\Order;
 use Magento\Framework\Exception\LocalizedException;
 use Vendor\CustomOrderProcessing\Api\Data\OrderStatusUpdateRequestInterface;
 use Magento\Sales\Model\Order\Email\Sender\OrderCommentSender;
+use Vendor\CustomOrderProcessing\Model\OrderStatusHistoryRepository;
 
 class OrderStatusManagement implements OrderStatusManagementInterface
 {
@@ -23,15 +24,23 @@ class OrderStatusManagement implements OrderStatusManagementInterface
     protected $orderCommentSender;
 
     /**
+     * @var OrderStatusHistoryRepository
+     */
+    protected $orderStatusHistoryRepository;
+
+    /**
      * @param OrderRepositoryInterface $orderRepository
      * @param OrderCommentSender $orderCommentSender
+     * @param OrderStatusHistoryRepository $orderStatusHistoryRepository
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
-        OrderCommentSender $orderCommentSender
+        OrderCommentSender $orderCommentSender,
+        OrderStatusHistoryRepository $orderStatusHistoryRepository
     ) {
         $this->orderRepository = $orderRepository;
         $this->orderCommentSender = $orderCommentSender;
+        $this->orderStatusHistoryRepository = $orderStatusHistoryRepository;
     }
 
     /**
@@ -46,8 +55,18 @@ class OrderStatusManagement implements OrderStatusManagementInterface
             throw new LocalizedException(__("Order with ID %1 does not exist.", $orderId));
         }
 
-        // Validate allowed status transitions
         $currentStatus = $order->getStatus();
+        if ($currentStatus === $status) {
+            throw new LocalizedException(__("Order status is already set to %1.", $status));
+        }
+        if (!$status) {
+            throw new LocalizedException(__("Status cannot be empty."));
+        }
+        if (!is_string($status)) {
+            throw new LocalizedException(__("Status must be a string."));
+        }
+
+        // Validate allowed status transitions
         $allowedStatuses = $order->getConfig()->getStateStatuses($order->getState());
         if (!array_key_exists($status, $allowedStatuses)) {
             throw new LocalizedException(__("Status transition from %1 to %2 is not allowed.", $currentStatus, $status));
@@ -68,6 +87,13 @@ class OrderStatusManagement implements OrderStatusManagementInterface
         if ($notify) {
             $this->orderCommentSender->send($order, true, $comment); // Sends email to customer
         }
-        return true;
+
+        // return json response of order status history from the repository
+        $history = $this->orderStatusHistoryRepository->getStatusHistoryByOrder($orderId);
+        if (!$history) {
+            throw new LocalizedException(__("Failed to retrieve order status history for order ID %1.", $orderId));
+        }
+
+        return $history;
     }
 } 
