@@ -46,7 +46,7 @@ class OrderStatusHistoryTest extends TestCase
         $select = $connection->select()
             ->from('sales_order_status_change_history') // <- replace with your actual table name
             ->where('order_id = ?', $orderId)
-            ->where('old_status = ?', $oldStatus)
+            ->where('old_status = ?', $oldStatus) 
             ->where('new_status = ?', 'fraud');
         $result = $connection->fetchRow($select);
 

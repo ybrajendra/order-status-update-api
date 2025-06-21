@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="customorderprocessing" translate="label" sortOrder="10">
+            <label>Custom Order Processing</label>
+        </tab>
+        <section id="customorderprocessing_api"  translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class> 
+            <label>API Settings </label>
+            <tab>customorderprocessing</tab> 
+            <resource>Vendor_CustomOrderProcessing::api_config</resource>
+            <group id="general" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Settings</label> 
+                <field id="request_limit" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Request Limit</label>
+                    <comment><![CDATA[Number of requests allowed]]></comment>
+                </field>
+                <field id="period" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Period</label>
+                    <comment><![CDATA[In seconds, e.g., 60 for 1 minute]]></comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
